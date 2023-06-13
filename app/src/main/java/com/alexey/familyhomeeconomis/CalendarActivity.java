@@ -10,15 +10,22 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.CalendarView;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.text.DateFormatSymbols;
+
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import com.prolificinteractive.materialcalendarview.format.WeekDayFormatter;
 
@@ -33,14 +40,17 @@ public class CalendarActivity extends AppCompatActivity {
     private TitleFormatter[] titleFormatters = new TitleFormatter[12];
     private TextView yearTextView;
     private int selectedYear;
-
+    private List<Transaction> transactions = new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-
+        Spinner yearSpinner = findViewById(R.id.yearSpinner);
+        TextView yearTextView = findViewById(R.id.yearTextView);
+        TextView yearlyIncomeTextView = findViewById(R.id.yearlyIncomeId);
+        TextView yearlyExpenseTextView = findViewById(R.id.yearlyExpenseId);
         final String[] months = {"январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"};
 
         yearTextView = findViewById(R.id.yearTextView);
@@ -49,8 +59,8 @@ public class CalendarActivity extends AppCompatActivity {
         yearTextView.setText(String.valueOf(selectedYear));
 
         // Initialize the TextViews
-        yearlyIncomeTextView = findViewById(R.id.yearlyIncomeTextView);
-        yearlyExpenseTextView = findViewById(R.id.yearlyExpenseTextView);
+        yearlyIncomeTextView = findViewById(R.id.yearlyIncomeId);
+        yearlyExpenseTextView = findViewById(R.id.yearlyExpenseId);
 
         yearTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,19 +94,26 @@ public class CalendarActivity extends AppCompatActivity {
             calendarViews[i].addDecorator(saturdayDecorator);
 
             // Добавляем обработчик нажатия на календарь
-            calendarViews[i].setOnDateChangedListener(new MaterialCalendarView.OnDateChangedListener() {
+            calendarViews[i].setOnDateChangedListener(new OnDateSelectedListener() {
                 @Override
-                public void onDateChanged(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date) {
-                    Intent intent = new Intent(CalendarActivity.this, MonthActivity.class);
-                    intent.putExtra("selectedYear", selectedYear);
-                    intent.putExtra("selectedMonth", monthIndex);
-                    startActivity(intent);
+                public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                    Calendar calendar = date.getCalendar();
+                    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                    if (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY) {
+                        Intent intent = new Intent(CalendarActivity.this, MonthActivity.class);
+                        intent.putExtra("selectedYear", selectedYear);
+                        intent.putExtra("selectedMonth", monthIndex);
+                        startActivity(intent);
+                    }
                 }
             });
+
+
+
         }
 
         // Загрузка данных JSON и расчет общего дохода и расходов для выбранного года.
-        String jsonString = YOUR_JSON_STRING; // Замените YOUR_JSON_STRING на вашу строку JSON
+        String jsonString = "transactions.json"; // Замените YOUR_JSON_STRING на вашу строку JSON
         try {
             JSONArray jsonArray = new JSONArray(jsonString);
             double yearlyIncome = 0;
