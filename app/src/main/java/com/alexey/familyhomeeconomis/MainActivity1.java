@@ -1,5 +1,10 @@
 package com.alexey.familyhomeeconomis;
 
+public class MainActivity1 {
+    /*
+    package com.alexey.familyhomeeconomis;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -57,40 +62,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        mBalanceButton = findViewById(R.id.balanceButton);
-        mExitButton = findViewById(R.id.exitButton);
-        mTableLayout = findViewById(R.id.tableLayout);
-        drawer = findViewById(R.id.drawer_layout);
-
+        // Assuming you have a NavigationView
         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        mBalanceButton.setOnClickListener(new View.OnClickListener() {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                showTransactionDialog();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.nav_year) {
+                    // Open YearActivity when "Year" is clicked
+                    Intent intent = new Intent(MainActivity.this, YearActivity.class);
+                    startActivity(intent);
+                } else if (id == R.id.nav_month) {
+                    // Open MonthActivity when "Month" is clicked
+                    Intent intent = new Intent(MainActivity.this, MonthActivity.class);
+                    startActivity(intent);
+                } else if (id == R.id.nav_day) {
+                    // Open DayActivity when "Day" is clicked
+                    Intent intent = new Intent(MainActivity.this, DayActivity.class);
+                    startActivity(intent);
+                }
+
+                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
             }
         });
-
-        mExitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        }
-
-        addTableHeader();
-        loadTransactions();
-        updateBalanceButton();
     }
 
     private void showTransactionDialog() {
@@ -103,54 +100,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final EditText expenseInput = customLayout.findViewById(R.id.expenseInput);
         final EditText categoryInput = customLayout.findViewById(R.id.categoryInput);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        final List<Transaction> tempTransactions = new ArrayList<>();
+
+        builder.setPositiveButton("OK", null);
+        builder.setNegativeButton("Завершить", null);
+
+        final AlertDialog dialog = builder.create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String income = incomeInput.getText().toString();
-                String expense = expenseInput.getText().toString();
-                String category = categoryInput.getText().toString();
-                String date = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()).format(new Date());
+            public void onShow(DialogInterface dialogInterface) {
+                Button okButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                okButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String income = incomeInput.getText().toString();
+                        String expense = expenseInput.getText().toString();
+                        String category = categoryInput.getText().toString();
+                        String date = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()).format(new Date());
 
-                float incomeValue = income.isEmpty() ? 0.0f : Float.parseFloat(income);
-                float expenseValue = expense.isEmpty() ? 0.0f : Float.parseFloat(expense);
-                balance += incomeValue - expenseValue;
+                        float incomeValue = income.isEmpty() ? 0.0f : Float.parseFloat(income);
+                        float expenseValue = expense.isEmpty() ? 0.0f : Float.parseFloat(expense);
+                        balance += incomeValue - expenseValue;
 
-                addRowToTable(date, String.valueOf(incomeValue), category, String.valueOf(expenseValue));
+                        Transaction transaction = new Transaction(date, category, incomeValue, expenseValue);
 
-                Transaction transaction = new Transaction(date, category, incomeValue, expenseValue);
+                        tempTransactions.add(transaction);
 
-                transactions.add(transaction);
-                saveTransactions();
-                updateBalanceButton();
+                        incomeInput.setText("");
+                        expenseInput.setText("");
+                        categoryInput.setText("");
+                    }
+                });
+
+                Button exitButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE);
+                exitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        for (Transaction transaction : tempTransactions) {
+                            addRowToTable(transaction.getDate(), String.valueOf(transaction.getIncome()), transaction.getCategory(), String.valueOf(transaction.getExpense()));
+                            transactions.add(transaction);
+                        }
+                        saveTransactions();
+                        updateBalanceButton();
+                        dialog.dismiss();
+                    }
+                });
             }
         });
 
-        builder.setNegativeButton("Завершить", null);
-
-        AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    private void addRowToTable(String date, String income, String category, String expense) {
-        TableRow row = new TableRow(this);
-
-        TextView dateView = new TextView(this);
-        TextView categoryView = new TextView(this);
-        TextView incomeView = new TextView(this);
-        TextView expenseView = new TextView(this);
-
-        dateView.setText(date);
-        categoryView.setText(category);
-        incomeView.setText(income);
-        expenseView.setText(expense);
-
-        row.addView(dateView);
-        row.addView(categoryView);
-        row.addView(incomeView);
-        row.addView(expenseView);
-
-        mTableLayout.addView(row);
-    }
 
     private void addTableHeader() {
         TableRow headerRow = new TableRow(this);
@@ -158,22 +159,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView dateHeader = new TextView(this);
         dateHeader.setText("Дата");
 
-        TextView categoryHeader = new TextView(this);
-        categoryHeader.setText("Статья");
-
         TextView incomeHeader = new TextView(this);
         incomeHeader.setText("Доход");
+
+        TextView categoryHeader = new TextView(this);
+        categoryHeader.setText("Статья");
 
         TextView expenseHeader = new TextView(this);
         expenseHeader.setText("Расход");
 
         headerRow.addView(dateHeader);
-        headerRow.addView(categoryHeader);
         headerRow.addView(incomeHeader);
+        headerRow.addView(categoryHeader);
         headerRow.addView(expenseHeader);
 
         mTableLayout.addView(headerRow);
     }
+
+    private void addRowToTable(String date, String income, String category, String expense) {
+        TableRow row = new TableRow(this);
+
+        TextView dateView = new TextView(this);
+        TextView incomeView = new TextView(this);
+        TextView categoryView = new TextView(this);
+        TextView expenseView = new TextView(this);
+
+        dateView.setText(date);
+        incomeView.setText(income);
+        categoryView.setText(category);
+        expenseView.setText(expense);
+
+        row.addView(dateView);
+        row.addView(incomeView);
+        row.addView(categoryView);
+        row.addView(expenseView);
+
+        mTableLayout.addView(row);
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -189,8 +212,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_year) {
-            Intent intent = new Intent(this, CalendarActivity.class);
-            startActivity(intent);
+            // TODO: open year activity
         } else if (id == R.id.nav_month) {
             // TODO: open month activity
         } else if (id == R.id.nav_day) {
@@ -202,7 +224,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -267,4 +288,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String balanceText = String.format(Locale.getDefault(), "Баланс: %.2f", balance);
         mBalanceButton.setText(balanceText);
     }
+}
+
+     */
 }

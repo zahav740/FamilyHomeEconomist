@@ -3,8 +3,8 @@ package com.alexey.familyhomeeconomis;
 public class Transaction {
     private String date;
     private String category;
-    private float income;
-    private float expense;
+    private double income;
+    private double expense;
 
     public Transaction(String date, String category, float income, float expense) {
         this.date = date;
@@ -21,11 +21,11 @@ public class Transaction {
         return category;
     }
 
-    public float getIncome() {
+    public double getIncome() {
         return income;
     }
 
-    public float getExpense() {
+    public double getExpense() {
         return expense;
     }
 }

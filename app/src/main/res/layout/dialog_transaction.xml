@@ -9,20 +9,23 @@
         android:id="@+id/incomeInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Доход"
         android:inputType="numberDecimal"
-        android:hint="Доход" />
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/categoryInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Статья"
         android:inputType="text"
-        android:hint="Статья" />
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/expenseInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Расход"
         android:inputType="numberDecimal"
-        android:hint="Расход" />
+        android:minHeight="48dp" />
 </LinearLayout>

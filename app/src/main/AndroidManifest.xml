@@ -13,6 +13,14 @@
         android:theme="@style/Theme.FamilyHomeEconomis"
         tools:targetApi="31">
         <activity
+            android:name=".CalendarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".YearActivity"
+            android:exported="false" />
+        <activity android:name=".MonthActivity" />
+        <activity android:name=".DayActivity" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

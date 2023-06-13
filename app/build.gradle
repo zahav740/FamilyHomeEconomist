@@ -1,13 +1,10 @@
-plugins {
-    id 'com.android.application'
-}
+apply plugin: 'com.android.application'
 
 android {
     namespace 'com.alexey.familyhomeeconomis'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.alexey.familyhomeeconomis"
         minSdk 21
         targetSdk 33
         versionCode 1
@@ -37,4 +34,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.prolificinteractive:material-calendarview:1.4.3'
+}
+configurations {
+    all {
+        exclude group: 'com.android.support'
+    }
 }
