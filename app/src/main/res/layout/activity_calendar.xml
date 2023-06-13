@@ -40,6 +40,8 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="10sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:layout_marginEnd="5sp" />
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -49,6 +51,8 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="5sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:layout_marginEnd="5sp" />
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -58,6 +62,8 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="5sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:layout_marginEnd="10sp"/>
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -67,6 +73,8 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="10sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:layout_marginEnd="5sp"/>
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -76,6 +84,8 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="5sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:layout_marginEnd="5sp"/>
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -85,6 +95,8 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="5sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:layout_marginEnd="10sp"/>
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -94,6 +106,8 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="10sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:layout_marginEnd="5sp"/>
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -103,6 +117,8 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="5sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:layout_marginEnd="5sp"/>
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -112,6 +128,8 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="5sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:layout_marginEnd="10sp"/>
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -121,6 +139,8 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="10sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:layout_marginEnd="5sp"/>
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -130,6 +150,8 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="5sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:layout_marginEnd="5sp"/>
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -139,6 +161,8 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="5sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:layout_marginEnd="10sp"/>
         </GridLayout>
 
