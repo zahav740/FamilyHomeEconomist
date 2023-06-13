@@ -22,6 +22,10 @@ import java.text.DateFormatSymbols;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import com.prolificinteractive.materialcalendarview.format.WeekDayFormatter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class CalendarActivity extends AppCompatActivity {
 
     // Создаем массив для хранения всех календарей
@@ -36,12 +40,17 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-        final String[] months = {"январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"};
-        yearTextView = findViewById(R.id.yearTextView);
 
+        final String[] months = {"январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"};
+
+        yearTextView = findViewById(R.id.yearTextView);
         // Устанавливаем текущий год в TextView
         selectedYear = Calendar.getInstance().get(Calendar.YEAR);
         yearTextView.setText(String.valueOf(selectedYear));
+
+        // Initialize the TextViews
+        yearlyIncomeTextView = findViewById(R.id.yearlyIncomeTextView);
+        yearlyExpenseTextView = findViewById(R.id.yearlyExpenseTextView);
 
         yearTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,18 +93,36 @@ public class CalendarActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+        }
 
-        int id = getResources().getIdentifier("calendarView" + (i + 1), "id", getPackageName());
-            calendarViews[i] = findViewById(id);
-            calendarViews[i].setTitleFormatter(titleFormatters[i]);
-            calendarViews[i].setWeekDayFormatter(customWeekDayFormatter);
-            calendarViews[i].addDecorator(saturdayDecorator);
+        // Загрузка данных JSON и расчет общего дохода и расходов для выбранного года.
+        String jsonString = YOUR_JSON_STRING; // Замените YOUR_JSON_STRING на вашу строку JSON
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            double yearlyIncome = 0;
+            double yearlyExpense = 0;
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String date = jsonObject.getString("date");
+                int year = Integer.parseInt(date.split("\\.")[0]);
+
+                if (year == selectedYear) {
+                    yearlyIncome += jsonObject.getDouble("income");
+                    yearlyExpense += jsonObject.getDouble("expense");
+                }
+            }
+
+            yearlyIncomeTextView.setText(String.valueOf(yearlyIncome));
+            yearlyExpenseTextView.setText(String.valueOf(yearlyExpense));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         // Обновляем все календари, чтобы отображать текущий год
         updateCalendars(selectedYear);
     }
-
     private void calculateAndDisplayYearlyIncomeAndExpense() {
         float totalIncome = 0;
         float totalExpense = 0;
