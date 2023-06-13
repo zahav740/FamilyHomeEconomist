@@ -19,12 +19,14 @@
 
         <TextView
             android:id="@+id/yearTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10sp"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:text="2023"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
 
         <GridLayout
             android:layout_width="match_parent"
