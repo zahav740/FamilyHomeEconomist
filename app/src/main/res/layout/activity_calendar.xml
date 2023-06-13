@@ -9,6 +9,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/yearlyIncomeId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Общий доход:"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/yearlyExpenseId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Общий расход:"
+            android:textSize="18sp" />
+
         <Spinner
             android:id="@+id/yearSpinner"
             android:layout_width="match_parent"

@@ -1,8 +1,10 @@
 package com.alexey.familyhomeeconomis;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -71,12 +73,44 @@ public class CalendarActivity extends AppCompatActivity {
             calendarViews[i].setTitleFormatter(titleFormatters[i]);
             calendarViews[i].setWeekDayFormatter(customWeekDayFormatter);
             calendarViews[i].addDecorator(saturdayDecorator);
+
+            // Добавляем обработчик нажатия на календарь
+            calendarViews[i].setOnDateChangedListener(new MaterialCalendarView.OnDateChangedListener() {
+                @Override
+                public void onDateChanged(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date) {
+                    Intent intent = new Intent(CalendarActivity.this, MonthActivity.class);
+                    intent.putExtra("selectedYear", selectedYear);
+                    intent.putExtra("selectedMonth", monthIndex);
+                    startActivity(intent);
+                }
+            });
+
+        int id = getResources().getIdentifier("calendarView" + (i + 1), "id", getPackageName());
+            calendarViews[i] = findViewById(id);
+            calendarViews[i].setTitleFormatter(titleFormatters[i]);
+            calendarViews[i].setWeekDayFormatter(customWeekDayFormatter);
+            calendarViews[i].addDecorator(saturdayDecorator);
         }
 
         // Обновляем все календари, чтобы отображать текущий год
         updateCalendars(selectedYear);
     }
 
+    private void calculateAndDisplayYearlyIncomeAndExpense() {
+        float totalIncome = 0;
+        float totalExpense = 0;
+
+        for (Transaction transaction : transactions) {
+            totalIncome += transaction.getIncome();
+            totalExpense += transaction.getExpense();
+        }
+
+        TextView yearlyIncomeTextView = findViewById(R.id.yearlyIncomeId); // Check the correct id
+        TextView yearlyExpenseTextView = findViewById(R.id.yearlyExpenseId); // Check the correct id
+
+        yearlyIncomeTextView.setText(String.format(Locale.getDefault(), "Общий доход: %.2f", totalIncome));
+        yearlyExpenseTextView.setText(String.format(Locale.getDefault(), "Общий расход: %.2f", totalExpense));
+    }
     public class CustomWeekDayFormatter implements WeekDayFormatter {
         private final DateFormatSymbols weekDaySymbols;
         private final int normalColor;
@@ -157,4 +191,7 @@ public class CalendarActivity extends AppCompatActivity {
         // Показать диалог
         builder.show();
     }
+
+
+
 }
